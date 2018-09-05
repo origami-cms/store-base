@@ -1,0 +1,25 @@
+{
+  "name": "origami-store-base",
+  "version": "0.0.0",
+  "description": "Base Model Store for Origami CMS",
+  "main": "./build/index.js",
+  "repository": "https://github.com/origami-cms/store-base",
+  "author": "Tristan Matthias <hello@tristanmatthias.com>",
+  "license": "MIT",
+  "scripts": {
+    "clean": "rm -r build/",
+    "build": "yarn clean; tsc",
+    "watch": "yarn build -w"
+  },
+  "dependencies": {
+    "@types/clone": "^0.1.30",
+    "clone": "^2.1.2",
+    "origami-core-lib": "^0.3.13-alpha.7"
+  },
+  "devDependencies": {
+    "core-decorators": "^0.20.0",
+    "tslint": "^5.11.0",
+    "tslint-config-origami": "^1.0.3",
+    "typescript": "^3.0.1"
+  }
+}
