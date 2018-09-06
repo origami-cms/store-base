@@ -82,7 +82,7 @@ export default class Resource {
 
     protected get _hiddenFields() {
         return Object.entries(this._schema.properties)
-            .filter(([prop, value]) => value.hidden)
+            .filter(([prop, value]) => value.hidden === true)
             .map(([prop, value]) => prop);
     }
 
