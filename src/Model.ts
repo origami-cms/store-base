@@ -9,7 +9,9 @@ export type ValidationMessages =
     'min' |
     'max' |
     'minLength' |
-    'maxLength';
+    'maxLength' |
+    'notFound' |
+    'notFoundID';
 
 export default class Model implements Origami.Store.Model {
 
@@ -117,11 +119,23 @@ export default class Model implements Origami.Store.Model {
         // Set the deleted flag
         const set = { deletedAt: new Date() };
 
-        return this._update(
+        const deleted = await this._update(
             this._resourceFrom(q),
             this._resourceFrom(set),
             opts
         );
+
+        // No resources deleted/updated
+        if (deleted === null || deleted.length === 0) {
+            if (typeof idOrObj === 'string') {
+                return this._validationError(
+                    this._validateMessages.notFoundID(idOrObj),
+                    'id',
+                    'notFoundID'
+                );
+            } else this._validationError(this._validateMessages.notFound(), null, 'notFound');
+        // If all resources returned null (EG: Each was deleted)
+        } else if (deleted.every(v => v === null)) return true;
     }
 
 
@@ -162,7 +176,7 @@ export default class Model implements Origami.Store.Model {
         throw new Error(`Origami.Model: ${errOrString}`);
     }
 
-    protected _validationError = (str: string, field: string, rule: ValidationMessages) => {
+    protected _validationError = (str: string, field: string | null, rule: ValidationMessages) => {
         const err = new Error(str) as Origami.Server.DataError;
 
         err.data = [
@@ -208,7 +222,12 @@ export default class Model implements Origami.Store.Model {
                 `Field '${field}' should be longer than '${expected}' characters, not '${passed.length}' on model '${this.name}'`,
             maxLength: (field: string, passed: string = '', expected: string) =>
                 `Field '${field}' should be shorter than '${expected}' characters, not '${passed.length}' on model '${this.name}'`,
-        };
+            notFound: () =>
+                `No resource found`,
+            notFoundID: (id: string) =>
+                `No resource found with id '${id}'`
+
+        } as {[rule in ValidationMessages]: (...args: any[]) => string};
     }
 
     // ------------------------------------------------------------------------|
@@ -241,7 +260,7 @@ export default class Model implements Origami.Store.Model {
         query: object,
         newResource: object,
         options?: object
-    ): Promise<Resource[] | null> {
+    ): Promise<(Resource | null)[] | null> {
 
         this._error('_update() is not implemented');
         return null;
