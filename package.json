@@ -3,6 +3,7 @@
   "version": "0.0.1-alpha.2",
   "description": "Base Model Store for Origami CMS",
   "main": "./build/index.js",
+  "typings": "./build/index.d.ts",
   "repository": "https://github.com/origami-cms/store-base",
   "author": "Tristan Matthias <hello@tristanmatthias.com>",
   "license": "MIT",
