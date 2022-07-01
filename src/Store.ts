@@ -18,6 +18,8 @@ export default class Store {
 
     get connURI() {
         const o = this._options;
+        /* @ts-ignore TODO: FIX THIS LATER */
+        if (o.connURI) return o.connURI;
         return `${o.type}://${o.username}:${o.password}@${o.host}:${o.port}/${o.database}`;
     }
 
