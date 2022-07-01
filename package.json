@@ -1,6 +1,6 @@
 {
   "name": "origami-store-base",
-  "version": "0.0.1-alpha.4",
+  "version": "0.0.1-alpha.5",
   "description": "Base Model Store for Origami CMS",
   "main": "./build/index.js",
   "typings": "./build/index.d.ts",
